@@ -65,8 +65,10 @@ function initialize(){
             optionsList.style.display = 'none'
         } else {
             optionsList.innerHTML = ' '
+            let idxOption=0;
             filteredOptions.forEach(option => {
                 const optionButton = document.createElement('button');
+                optionButton.id = "country" + idxOption.toString()
                 optionButton.textContent = option;
 
                 optionButton.addEventListener('click', function() {
@@ -94,8 +96,37 @@ function initialize(){
                 optionsList.appendChild(optionButton)
             });
             optionsList.style.display = 'block'
+            idxOption += 1;
         }
 
+    });
+
+    inputField.addEventListener('keypress', function(e) {
+        if(e.key === 'Enter'){
+            try{
+                inputField.value = optionsList.getElementsByTagName('button')[0].innerText;
+            
+                const guess = document.createElement('h2');
+                guess.innerText = inputField.value
+                console.log(guess.innerHTML)
+                guessesList.appendChild(guess)
+                
+                if(inputField.value == country_list[auxRnd]['name']){
+                    winningPage("You won! Congrats!");
+                }
+                
+                inputField.value = '';
+                
+                curTry += 1;
+                attempts.innerText = curTry.toString() + '/' + maxTries.toString()
+                
+                if(curTry === maxTries){
+                    winningPage("You lost! You got it in the next one!");
+                }
+
+                optionsList.innerHTML = ''
+            }catch(err){}
+        }
     })
     return true
 }
